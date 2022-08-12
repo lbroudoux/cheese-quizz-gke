@@ -1,0 +1,38 @@
+steps:
+  - name: maven:3-jdk-8
+    entrypoint: mvn
+    args: ['package']
+
+  - name: gcr.io/cloud-builders/docker
+    #args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'gcr.io/$PROJECT_ID/cheese-quizz-client:latest', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
+    args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
+
+  # Explicitely push image to the registry before build completion to be able to deploy it.
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      #- gcr.io/$PROJECT_ID/cheese-quizz-client:$COMMIT_SHA
+      - europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA
+
+  - name: gcr.io/cloud-builders/kubectl
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$_CUSTOM_REGION
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
+    args:
+      - set
+      - image
+      - deployment/cheese-quizz-client
+      - quizz-client=europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA
+
+  - name: gcr.io/cloud-builders/kubectl
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$_CUSTOM_REGION
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
+    args:
+      - rollout
+      - restart
+      - deployment/cheese-quizz-client
+
+substitutions:
+  _CUSTOM_REGION: europe-west1
+  _CUSTOM_CLUSTER: cluster-1

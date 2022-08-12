@@ -16,6 +16,7 @@ steps:
       #- gcr.io/$PROJECT_ID/cheese-quizz-client:$COMMIT_SHA
       - europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA
 
+  # Update image in deployment
   - name: gcr.io/cloud-builders/kubectl
     env:
       - CLOUDSDK_COMPUTE_REGION=$_CUSTOM_REGION
@@ -25,6 +26,8 @@ steps:
       - image
       - deployment/cheese-quizz-client
       - quizz-client=europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA
+      - -n
+      - cheese-quizz
 
   - name: gcr.io/cloud-builders/kubectl
     env:
@@ -34,6 +37,8 @@ steps:
       - rollout
       - restart
       - deployment/cheese-quizz-client
+      - -n
+      - cheese-quizz
 
 options:
   pool:

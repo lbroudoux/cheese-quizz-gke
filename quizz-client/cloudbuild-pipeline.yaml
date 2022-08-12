@@ -35,6 +35,10 @@ steps:
       - restart
       - deployment/cheese-quizz-client
 
+options:
+  pool:
+    name: 'projects/$PROJECT_ID/locations/$_CUSTOM_REGION/workerPools/my-pool'
+
 substitutions:
   _CUSTOM_REGION: europe-west1
   _CUSTOM_CLUSTER: cluster-1

@@ -7,6 +7,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     #args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'gcr.io/$PROJECT_ID/cheese-quizz-client:latest', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
     args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
+    dir: 'quizz-client'
 
   # Explicitely push image to the registry before build completion to be able to deploy it.
   - name: gcr.io/cloud-builders/docker

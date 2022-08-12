@@ -5,7 +5,6 @@ steps:
     dir: 'quizz-client'
 
   - name: gcr.io/cloud-builders/docker
-    #args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'gcr.io/$PROJECT_ID/cheese-quizz-client:latest', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
     args: ['build', '-f', 'src/main/docker/Dockerfile.jvm', '-t', 'europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA', '--build-arg=JAR_FILE=target/quizz-client-1.0.0-SNAPSHOT-runner.jar', '.']
     dir: 'quizz-client'
 
@@ -13,7 +12,6 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      #- gcr.io/$PROJECT_ID/cheese-quizz-client:$COMMIT_SHA
       - europe-docker.pkg.dev/$PROJECT_ID/container-registry/cheese-quizz-client:$COMMIT_SHA
 
   # Update image in deployment
@@ -41,7 +39,8 @@ steps:
       - cheese-quizz
 
 options:
-  workerPool: 'projects/$PROJECT_ID/locations/$_CUSTOM_REGION/workerPools/my-pool'
+  pool:
+    name: 'projects/$PROJECT_ID/locations/$_CUSTOM_REGION/workerPools/my-pool'
 
 substitutions:
   _CUSTOM_REGION: europe-west1

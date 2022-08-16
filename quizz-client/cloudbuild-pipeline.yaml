@@ -40,7 +40,7 @@ steps:
 
 options:
   pool:
-    name: projects/cheese-quizz/locations/europe-west1/workerPools/my-pool
+    name: projects/$PROJECT_ID/locations/$_CUSTOM_REGION/workerPools/my-pool
 
 substitutions:
   _CUSTOM_REGION: europe-west1

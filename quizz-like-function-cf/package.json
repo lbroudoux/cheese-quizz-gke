@@ -1,0 +1,20 @@
+{
+  "name": "quizz-like-function-cf",
+  "version": "0.0.1",
+  "description": "quizz-like-function-cf",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.1.0",
+    "@google-cloud/pubsub": "^3.1.0"
+  },
+  "keywords": [
+    "api",
+    "microservices",
+    "cloud-function"
+  ],
+  "author": "laurent.broudoux@gmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/lbroudoux/cheese-quizz-gke/issues"
+  },
+  "homepage": "https://github.com/lbroudoux/cheese-quizz-gke#readme"
+}

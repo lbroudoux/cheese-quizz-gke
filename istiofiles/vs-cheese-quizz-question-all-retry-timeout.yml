@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cheese-quizz-question
+spec:
+  hosts:
+  - cheese-quizz-question
+  http:
+  - timeout: 1.000s
+    retries:
+      attempts: 5
+      perTryTimeout: 100ms
+      retryOn: 'gateway-error,connect-failure,refused-stream'
+      # Very important to ensure that next attempt will be done using another remote endpoint.
+      # This is necessary when adding outlierDetection because in case of timeout, endpoint is not 
+      # identified as outlier... so next attempt is made on same endpoint if retryRemoteLocalities
+      # is not set or set to false.
+      retryRemoteLocalities: true 
+    route:
+    - destination:
+        host: cheese-quizz-question
+        subset: v1
+      weight: 33
+    - destination:
+        host: cheese-quizz-question
+        subset: v2
+      weight: 33
+    - destination:
+        host: cheese-quizz-question
+        subset: v3
+      weight: 34

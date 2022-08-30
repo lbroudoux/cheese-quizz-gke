@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cheese-quizz-client-ingress
+  annotations:
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: cheese-quizz-gke-adr
+  labels:
+    app: cheese-quizz-client
+spec:
+  rules:
+  - host: cheese-quizz-client.cheese-quizz.lbroudoux.demo.altostrat.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cheese-quizz-client
+            port:
+              number: 8080

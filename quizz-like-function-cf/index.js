@@ -15,6 +15,8 @@ functions.http('apiLike', async (req, res) => {
     res.status(204).send('');
 
   } else if (req.method == 'POST') {
+    console.info("-- Invoking the createLike API with " + JSON.stringify(lreq.body));
+
     // Post body into PubSub.
     var client = new PubSub({
       projectId: pubSubProject

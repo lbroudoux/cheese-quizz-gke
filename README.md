@@ -122,7 +122,7 @@ gcloud container fleet mesh update \
      --project cheese-quizz
 ```
 
-Check, we'he swicthed to `AUTOMATIC`:
+Check we have actually switched to `AUTOMATIC`:
 
 ```sh
 $ gcloud container fleet mesh describe --project cheese-quizz
@@ -205,7 +205,9 @@ gcloud artifacts repositories create container-registry \
     --repository-format=docker \
     --location=europe
 
-gcloud projects add-iam-policy-binding $PROJECT --member=$PROJECT_NUMBER-compute@developer.gserviceaccount.com --role=roles/artifactregistry.reader
+gcloud projects add-iam-policy-binding $PROJECT \
+    --member=$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
+    --role=roles/artifactregistry.reader
     
 gcloud builds submit --config quizz-client/cloudbuild.yaml quizz-client/
 ```
@@ -228,10 +230,10 @@ kubectl apply -f manifests/quizz-client-ingress.yml -n cheese-quizz
 
 ## Demonstration scenario
 
-Once above commands are issued and everything successfully deployed, retrieve the Cheese Quizz route:
+Once above commands are issued and everything successfully deployed, retrieve the Cheese Quizz ingress:
 
 ```sh
-$ kubectl get ingress/cheese-quizz-client-ingress -n cheese-quizz | grep cheese-quizz-client | awk '{print $3}'
+kubectl get ingress/cheese-quizz-client-ingress -n cheese-quizz | grep cheese-quizz-client | awk '{print $3}'
 ```
 
 and open it into a browser. You should get the following:
@@ -239,6 +241,8 @@ and open it into a browser. You should get the following:
 <img src="./assets/cheddar-quizz.png" width="400">
 
 ### Anthos Service Mesh demonstration
+
+This is the beginning of **Part 1** of the demonstration. We're going to deep dive in most of the features and benefits that are brought by a Service Mesh.
 
 #### Canary release and blue-green deployment
 
@@ -558,12 +562,14 @@ And finally ensure that our pipeline is successful.
 
 ### Google Cloud Serverless demonstration
 
-This is the beginning of *Part 3* of the demonstration. Now you're gonne link the "Like Cheese" feature with a message publication within a PubSub broker. So first, we have to configure a PubSub topic topic we'll use to advert of new `CheeseLike` messages.
+This is the beginning of **Part 3** of the demonstration. Now you're gonne link the "Like Cheese" feature with a message publication within a PubSub broker. So first, we have to configure a PubSub topic we'll use to advert of new `CheeseLike` messages:
 
 ```sh
 gcloud pubsub topics create cheese-quizz-likes
 gcloud pubsub subscriptions create cheese-quizz-likes-echo --message-retention-duration=10m
 ```
+
+> We created a `echo` subscription for tracking and troubleshooting published messages.
 
 We're gonna create a dedicated service account for our serverless function and make this account a PubSub publisher:
 

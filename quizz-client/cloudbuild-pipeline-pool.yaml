@@ -38,6 +38,10 @@ steps:
       - -n
       - cheese-quizz
 
+options:
+  pool:
+    name: projects/cheese-quizz/locations/europe-west1/workerPools/my-pool
+    
 substitutions:
   _CUSTOM_REGION: europe-west1
   _CUSTOM_CLUSTER: cluster-1

@@ -300,7 +300,7 @@ Thus you can see the Pod causing troubles with traffic monitoring graph:
 
 > You may notice that traffic is not evenly dsitributed among the 3 versions since we introduce therror. You'll understand that in a minute.
 
-And inspect traces that are available from the Service Metrics pane to see errors. Be sure to add a `LABEL:error : true` criterion to the search bar:
+And inspect traces that are available from the Service Metrics pane to see errors. Be sure to add a `LABEL:error : true` or a `HashLabel : error` criterion to the search bar:
 
 ![traces-error-v2](./assets/traces-error-v2.png)
 

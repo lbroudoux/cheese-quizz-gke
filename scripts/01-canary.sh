@@ -1,0 +1,1 @@
+kubectl apply -f istiofiles/vs-cheese-quizz-question-v1-v2-canary.yml

@@ -256,7 +256,7 @@ Using the hamburger menu on the GUI, you should be able to subscribe the `Beta P
 
 <img src="./assets/emmental-quizz.png" width="400">
 
-Now turning on the `Auto Refresh` feature, you should be able to visualize everything into Kiali, showing how turning on and off the Beta subscription has influence on the visualization of networks routes.
+Now turning on the `Auto Refresh` feature, you should be able to visualize everything into Anthos console, showing how turning on and off the Beta subscription has influence on the visualization of networks routes.
 
 Once we're confident with the `v2` Emmental question, we can turn on Blue-Green deployment process using weighted routes on the Istio `VirtualService`. We apply a 70-30 repartition:
 
@@ -310,7 +310,7 @@ In order to make our application more resilient, we have to start by creating ne
 kubectl scale deployment/cheese-quizz-question-v2 --replicas=2 -n cheese-quizz
 ```
 
-Newly created pod will serve requests without error but we can see in the Kiali console that the service `cheese-quizz-question` remains degraded (despite green arrows joinining `v2` Pods).
+Newly created pod will serve requests without error but we can see in the Anthos console that the service `cheese-quizz-question` remains degraded (despite green arrows joinining `v2` Pods).
 
 ![asm-traffic-degraded-v2](./assets/asm-traffic-degraded-v2.png)
 
@@ -322,7 +322,7 @@ Istio proxies automatically retry doing the invocation to `v2` because a number 
 * There's a second replica present,
 * It's a HTTP `GET` request that is supposed to be idempotent (so replay is safe).
 
-An optimal way of managing this kind of issue would be to declare a `CircuitBreaker` for handling this problem more efficiently. Circuit breaker policy will be in charge to detect Pod return ing errors and evict them from the elligible targets pool for a configured time. Then, the endpoint will be re-tried and will re-join the pool if everything is back to normal.
+An optimal way of managing this kind of issue would be to declare a `CircuitBreaker` for handling this problem more efficiently. Circuit breaker policy will be in charge to detect Pod returning errors and evict them from the elligible targets pool for a configured time. Then, the endpoint will be re-tried and will re-join the pool if everything is back to normal.
 
 Let's apply the circuit breaker configuration to our question `DestinationRule`:
 
@@ -358,7 +358,7 @@ Before digging and solving this issue, let's review the application configuratio
 * A 3 seconds timeout is configured within the Pod handling the `v3` question. Let see the [question source code](https://github.com/lbroudoux/cheese-quizz/blob/master/quizz-question/src/main/java/com/github/lbroudoux/cheese/CheeseResource.java#L110)
 * A 1.5 seconds timeout is configured within the Pod handling the client. Let see the [client configuration](https://github.com/lbroudoux/cheese-quizz/blob/master/quizz-client/src/main/resources/application.properties#L14)
 
-Checking the distributed traces within Kiali console we can actually see that the request takes 1.5 seconds before returning an error:
+Checking the distributed traces within Anthos console we can actually see that the request takes 1.5 seconds before returning an error:
 
 ![traces-timeout-v3](./assets/traces-timeout-v3.png)
 

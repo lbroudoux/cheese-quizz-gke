@@ -213,6 +213,7 @@ function likeCheese() {
     alert("Thanks for your like!");
   })
   .fail(function(data) {
+    console.log('fail: ' + JSON.stringify(data));
     alert("Sorry but there was an error...");
   });
 }
